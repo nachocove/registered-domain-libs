@@ -22,6 +22,12 @@ if ($_SERVER['argc']>1) {
 	}
 }
 
+if (function_exists('split')){
+	$backwards_compatible_explode = 'split';
+}else{
+	$backwards_compatible_explode = 'explode';
+}
+
 /*
  * Does $search start with $startstring?
  */
@@ -150,7 +156,7 @@ error_reporting(E_ERROR);
 $tldTree = array();
 $list = file_get_contents(URL);
 // $list = "bg\na.bg\n0.bg\n!c.bg\n";
-$lines = split("\n", $list);
+$lines = $backwards_compatible_explode("\n", $list);
 $licence = TRUE;
 
 if ($format == "php") echo "<?php\n";
@@ -176,7 +182,7 @@ foreach ($lines as $line) {
 	}
 
 	// this must be a TLD
-	$tldParts = split('\.', $line);
+	$tldParts = $backwards_compatible_explode('\.', $line);
 	buildSubdomain($tldTree, $tldParts);
 }
 
